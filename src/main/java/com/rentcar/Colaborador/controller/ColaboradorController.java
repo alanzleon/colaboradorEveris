@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping(value =  "/cliente")
+@RequestMapping(value =  "/colaborador")
 @CrossOrigin(value={})
 
 
