@@ -28,6 +28,10 @@ dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest'
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+
+	compile group: 'org.mongodb', name: 'mongo-java-driver', version: '3.11.2'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: '2.2.1.RELEASE'
+
 }
 
 test {
