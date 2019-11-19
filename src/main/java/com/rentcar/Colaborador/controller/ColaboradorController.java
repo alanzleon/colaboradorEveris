@@ -28,4 +28,6 @@ public class ColaboradorController {
         return ResponseEntity.ok(this.service.findAll());
     }
 
+
+
 }

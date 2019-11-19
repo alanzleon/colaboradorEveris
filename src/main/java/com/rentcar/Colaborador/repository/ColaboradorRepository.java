@@ -10,4 +10,6 @@ import java.io.Serializable;
 public interface ColaboradorRepository extends MongoRepository<ColaboradorEntity, Serializable> {
 
 
+
+
 }

@@ -8,6 +8,7 @@ import sun.util.calendar.LocalGregorianCalendar;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Data
 @Document(value = "Colaborador")
@@ -26,7 +27,7 @@ public class ColaboradorEntity implements Serializable {
     private int edad;
     private String sexo;
     private String nivelpermiso;    //(Supervisor, Vendedor o Administrador)
-    private LocalGregorianCalendar.Date fechincorporacion; //(Fecha)
+    private LocalDate fechincorporacion; //(Fecha)
     private int sueldobase;    //(Supervisor = 1.500.000, Administrador = 1.000.000, Vendedor = 750.000)
     private float bonoservicio; // (%)
 
