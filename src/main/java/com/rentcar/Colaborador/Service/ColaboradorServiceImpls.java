@@ -12,32 +12,33 @@ import java.util.Optional;
 public class ColaboradorServiceImpls implements ColaboradorService {
 
     @Autowired
-    private ColaboradorService colaboradorService;
+    private ColaboradorService repository;
 
 
     @Override
     public void saveColaborador(ColaboradorEntity Colaborador) {
-        if (Colaborador.getEdad>=18){
-            this.repository.save(Colaborador);
+        if (Colaborador.getEdad()>=18){
+            this.repository.saveColaborador(Colaborador);
+        }else{
+
         }
-        else{}
 
     }
 
     @Override
     public List<ColaboradorEntity> findColaborador() {
-        return this.repository.findAll();
+        return this.repository.findColaborador();
     }
 
     @Override
     public void updateColaborador(ColaboradorEntity Colaborador, String id) {
         Colaborador.setId(id);
-        this.repository.save(Colaborador);
+        this.repository.saveColaborador(Colaborador);
     }
 
     @Override
     public Optional<ColaboradorEntity> findColaboradorById(@PathVariable String idConsultor) {
-        return this.repository.findById(idConsultor);
+        return this.repository.findColaboradorById(idConsultor);
     }
 }
 
