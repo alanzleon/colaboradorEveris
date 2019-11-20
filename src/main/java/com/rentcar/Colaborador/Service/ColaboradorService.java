@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface ColaboradorService {
 
-    void saveColaborador (ColaboradorEntity Colaborador);
+    String saveColaborador(ColaboradorEntity Colaborador);
     List<ColaboradorEntity> findColaborador();
-    void updateColaborador (ColaboradorEntity Colaborador, String id);
-    Optional<ColaboradorEntity> findColaboradorById(String id);
+    String updateColaborador (ColaboradorEntity Colaborador, String id);
+    ColaboradorEntity findColaboradorById(String id);
 
 }

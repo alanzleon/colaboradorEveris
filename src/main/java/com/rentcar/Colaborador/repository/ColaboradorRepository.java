@@ -9,7 +9,8 @@ import java.io.Serializable;
 @Repository
 public interface ColaboradorRepository extends MongoRepository<ColaboradorEntity, Serializable> {
 
-    public ColaboradorEntity findColaboradorById();
+    public ColaboradorEntity findColaboradorById(String id);
+
 
 
 }
