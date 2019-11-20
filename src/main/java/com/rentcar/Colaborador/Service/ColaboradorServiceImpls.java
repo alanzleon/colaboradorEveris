@@ -1,26 +1,47 @@
 package com.rentcar.Colaborador.Service;
 
 import com.rentcar.Colaborador.entity.ColaboradorEntity;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import springfox.documentation.spring.web.json.Json;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import javax.swing.text.Document;
 import java.util.List;
+import java.util.Optional;
 
-//@Service
-//@RequiredArgsConstructor
-//public class ColaboradorServiceImpls implements ColaboradorService {
+@Service
+public class ColaboradorServiceImpls implements ColaboradorService {
 
-  //  private final ColaboradorService colaboradorService;
-//  @Override
-   // public List<ColaboradorEntity> obtenerColaborador() {
-   //     String colaboradorResponse = this.colaboradorService.obtenerColaborador();
+    @Autowired
+    private ColaboradorService colaboradorService;
 
 
-   // }
+    @Override
+    public void saveColaborador(ColaboradorEntity Colaborador) {
+        if (Colaborador.getEdad>=18){
+            this.repository.save(Colaborador);
+        }
+        else{}
+
+    }
+
+    @Override
+    public List<ColaboradorEntity> findColaborador() {
+        return this.repository.findAll();
+    }
+
+    @Override
+    public void updateColaborador(ColaboradorEntity Colaborador, String id) {
+        Colaborador.setId(id);
+        this.repository.save(Colaborador);
+    }
+
+    @Override
+    public Optional<ColaboradorEntity> findColaboradorById(@PathVariable String idConsultor) {
+        return this.repository.findById(idConsultor);
+    }
+}
 
 
 
 
-//}
+

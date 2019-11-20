@@ -4,17 +4,16 @@ package com.rentcar.Colaborador.entity;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import sun.util.calendar.LocalGregorianCalendar;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
-@Document(value = "Colaborador")
-public class ColaboradorEntity implements Serializable {
+@Document(collection = "Colaborador")
+public class ColaboradorEntity { //implements Serializable {
 
-    private static final long serialVersionUID = -1L;
+   // private static final long serialVersionUID = -1L;
 
     @Id
     @NotNull
