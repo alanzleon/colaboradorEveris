@@ -13,5 +13,7 @@ public interface ColaboradorService {
     ColaboradorEntity findColaboradorById(String id);
     String saveColaboradorF(ColaboradorEntity Colaborador);
     String saveColaboradorM(ColaboradorEntity Colaborador);
+    String saveNivelPermiso(ColaboradorEntity Colaborador);
+
 
 }
