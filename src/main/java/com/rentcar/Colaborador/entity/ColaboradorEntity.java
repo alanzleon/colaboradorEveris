@@ -2,13 +2,14 @@ package com.rentcar.Colaborador.entity;
 
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
-
+@Slf4j
 @Data
 @Document(collection = "colaborador")
 public class ColaboradorEntity implements Serializable {
