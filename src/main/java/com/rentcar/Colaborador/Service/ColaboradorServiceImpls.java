@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 public class ColaboradorServiceImpls implements ColaboradorService {
@@ -17,15 +18,71 @@ public class ColaboradorServiceImpls implements ColaboradorService {
 
 
     @Override
-    public String saveColaborador(ColaboradorEntity Colaborador) {
-        if (Colaborador.getEdad() >= 18) {
-            this.colaboradorRepositoryl.save(Colaborador);
-            return "EdadCorrecta.";
-        } else {
-            return "Edad Incorrecta debe ser mayo o igual que 18";
-        }
-    }
+    public String saveColaborador(ColaboradorEntity colaborador) {
+        try {
+            if (colaborador.getRut() != null) {
+                if (validarRut(colaborador.getRut())) {
+                    if (colaborador.getEdad() >= 18 && colaborador.getEdad() < 100) {
+                        if (colaborador.getNombre() != null) {
+                            if (colaborador.getApellidoPaterno() != null) {
+                                if (colaborador.getApellidoMaterno() != null) {
+                                    if (colaborador.getSexo() != null) {
+                                        String sexo = colaborador.getSexo().toLowerCase();
 
+                                        if (sexo.equals("masculino") || sexo.equals("femenino")) {
+
+                                            if (colaborador.getEdad() >= 18 && colaborador.getEdad() < 65){
+
+                                                }else{
+                                                    return "";
+                                                }
+                                                colaborador.setSexo(sexo);
+                                                colaborador.setEdad();
+                                                 if (colaborador.getNivelpermiso() != null) {
+                                                String tipoPermiso = colaborador.getNivelpermiso().toLowerCase();
+                                                     if (tipoPermiso.equals("administrador")) {
+                                                    colaborador.setSueldobase(1000000);
+                                                        } else if (tipoPermiso.equals("vendedor")) {
+                                                    colaborador.setSueldobase(750000);
+                                                        } else {
+                                                    tipoPermiso.equals("supervisor");
+                                                    colaborador.setSueldobase(1500000);
+                                                    this.colaboradorRepositoryl.save(colaborador);
+                                                     }
+
+                                                 } else {
+                                                return "NoNivelPermiso";
+                                                 }
+                                        } else {
+                                            return "NoSexo";
+                                        }
+                                    } else {
+                                        return "InvalidSexo";
+                                    }
+                                } else {
+                                    return "noApellidoMaterno";
+                                }
+                            } else {
+                                return "NoApellidoPaterno";
+                            }
+                        } else {
+                            return "NoNombre";
+                        }
+                    } else {
+                        return "NoEdad";
+                    }
+                } else {
+                    return "invalidRut";
+                }
+            } else {
+                return "NoRut";
+            }
+        } catch (Exception ex) {
+            return "" + ex;
+        }
+        return "ok";
+    }
+/*
     @Override
     public String saveColaboradorF(ColaboradorEntity Colaborador) {
         String sexo = Colaborador.getSexo().toLowerCase();
@@ -58,6 +115,9 @@ public class ColaboradorServiceImpls implements ColaboradorService {
         }
     }
 
+    */
+
+
 
     @Override
     public List<ColaboradorEntity> findColaborador() {
@@ -78,10 +138,43 @@ public class ColaboradorServiceImpls implements ColaboradorService {
 
 
     @Override
-    public ColaboradorEntity findColaboradorById(@PathVariable String idConsultor) {
-        return this.colaboradorRepositoryl.findById(idConsultor).get();
+    public ColaboradorEntity findColaboradorById (@PathVariable String idColaborador) {
+        return  this.colaboradorRepositoryl.findById(idColaborador).get();
     }
+
+    public boolean validarRut(String rut) {
+
+        boolean validacion = false;
+        try {
+            rut =  rut.toUpperCase();
+            rut = rut.replace(".", "");
+            rut = rut.replace("-", "");
+            int rutAux = Integer.parseInt(rut.substring(0, rut.length() - 1));
+
+            char dv = rut.charAt(rut.length() - 1);
+
+            int m = 0, s = 1;
+            for (; rutAux != 0; rutAux /= 10) {
+                s = (s + rutAux % 10 * (9 - m++ % 6)) % 11;
+            }
+            if (dv == (char) (s != 0 ? s + 47 : 75)) {
+                validacion = true;
+            }
+
+        } catch (java.lang.NumberFormatException e) {
+        } catch (Exception e) {
+        }
+        return validacion;
+    }
+
+    private  boolean validarTelefono(String telefono) {
+        Pattern pattern = Pattern.compile("^(\\+?56)?(\\s?)(0?9)(\\s?)[9876543]\\d{7}$");
+        return pattern.matcher(telefono).matches();
+    }
+
 }
+
+
 
 
 

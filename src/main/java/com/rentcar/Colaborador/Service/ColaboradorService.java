@@ -11,9 +11,8 @@ public interface ColaboradorService {
     List<ColaboradorEntity> findColaborador();
     String updateColaborador (ColaboradorEntity Colaborador, String id);
     ColaboradorEntity findColaboradorById(String id);
-    String saveColaboradorF(ColaboradorEntity Colaborador);
+/*    String saveColaboradorF(ColaboradorEntity Colaborador);
     String saveColaboradorM(ColaboradorEntity Colaborador);
     String saveNivelPermiso(ColaboradorEntity Colaborador);
-
-
+*/
 }

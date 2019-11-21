@@ -5,14 +5,16 @@ package com.rentcar.Colaborador.controller;
 
         import com.rentcar.Colaborador.Service.ColaboradorServiceImpls;
         import com.rentcar.Colaborador.entity.ColaboradorEntity;
+        import com.rentcar.Colaborador.repository.ColaboradorRepository;
         import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.http.HttpStatus;
         import org.springframework.http.ResponseEntity;
         import org.springframework.web.bind.annotation.*;
 
 
-
+        import java.util.Arrays;
         import java.util.List;
+        import java.util.regex.Pattern;
 
 
 @RestController
@@ -24,42 +26,86 @@ public class ColaboradorController {
     @Autowired
     private ColaboradorServiceImpls service;
 
-    @GetMapping("/getAll")
-    public ResponseEntity<?> getAll(){
-        ResponseEntity<?> response;
-        try {
-            List<ColaboradorEntity> colaboradorEntityList = this.service.findColaborador();
-            response = new ResponseEntity<>(colaboradorEntityList, HttpStatus.OK);
-        }catch(Exception ex){
-            System.out.println(ex);
-            response = new ResponseEntity<>("{\"Error\":\"Algo esta mal :/ \"}"+ ex, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return response;
+    @GetMapping("/colaborador")
+    public String saveColaborador(ColaboradorEntity colaborador) {
+
     }
 
-    @GetMapping("/getById")
+
+
+    @GetMapping("/colaborador/¨{id}")
     public ResponseEntity<?> getColaboradorById(String id){
         ResponseEntity<?> response;
-        try {
+        try{
             ColaboradorEntity colaborador = this.service.findColaboradorById(id);
             response = new ResponseEntity<>(colaborador, HttpStatus.OK);
-        }catch(Exception ex){
+        }catch (Exception ex) {
             System.out.println(ex);
-            response = new ResponseEntity<>("{\"Error\":\"Algo esta mal :/ \"}"+ ex, HttpStatus.INTERNAL_SERVER_ERROR);
+            response = new ResponseEntity<>("{\"Error\":\"Algo salio mal :c\"}"+ ex, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
+
     }
 
 
-    @PostMapping("/addColaborador")
-    public ResponseEntity<?> addColaborador (@RequestBody ColaboradorEntity colaborador){
+
+    @PostMapping("/colaborador")
+    public ResponseEntity<?> addCliente (@RequestBody ColaboradorEntity colaborador){
         ResponseEntity<?> response;
         String respuestaService = this.service.saveColaborador(colaborador);
         try{
-            if(respuestaService.equals("EdadCorrecta.")) {
-                response = new ResponseEntity<>("{\"Mensaje\":\"Colaborador creado correctamente\"}", HttpStatus.CREATED);
-            } else {
-                response = new ResponseEntity<>("{\"Error\":\"Edad debe ser mayor a 18 años\"}",HttpStatus.BAD_REQUEST);
+            switch (respuestaService) {
+                case "ok":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"Cliente creado correctamente\"}", HttpStatus.CREATED);
+                    break;
+                case "NoRut":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Rut\"}", HttpStatus.BAD_REQUEST);
+                    break;
+                case "NoEdad":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"Edad debe estar entre 25 y 100\"}", HttpStatus.BAD_REQUEST);
+                    break;
+                case "NoNombre":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Nombre\"}", HttpStatus.BAD_REQUEST);
+                    break;
+                case "NoApellidoPaterno":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Apellido Paterno\"}", HttpStatus.BAD_REQUEST);
+                    break;
+                case "noApellidoMaterno":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Apellido Materno\"}", HttpStatus.BAD_REQUEST);
+                    break;
+                case "NoSexo":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Sexo\"}", HttpStatus.BAD_REQUEST);
+                    break;
+                case "InvalidSexo":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"El sexo debe ser Masculino o Femenino\"}", HttpStatus.BAD_REQUEST);
+                    break;
+                case "NoDireccion":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Direccion\"}", HttpStatus.BAD_REQUEST);
+                    break;
+                case "NoTelefono":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Telefono\"}", HttpStatus.BAD_REQUEST);
+                    break;
+                case "NoTipoLicencia":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Tipo de licencia\"}", HttpStatus.BAD_REQUEST);
+                    break;
+                case "invalidTipoLicencia":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"El tipo de licencia debe ser 'A', 'B' o 'C'\"}", HttpStatus.BAD_REQUEST);
+                    break;
+                case "noFechaEmision":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta fecha emision licencia\"}", HttpStatus.BAD_REQUEST);
+                    break;
+                case "noFechaVencimiento":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta fecha de vencimiento licencia\"}", HttpStatus.BAD_REQUEST);
+                    break;
+                case "invalidRut":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"Ingrese un rut valido\"}", HttpStatus.CREATED);
+                    break;
+                case "invalidTelefono":
+                    response = new ResponseEntity<>("{\"Mensaje\":\"Ingrese un telefono valido\"}", HttpStatus.CREATED);
+                    break;
+                default:
+                    response = new ResponseEntity<>("{\"Error\":\"Algo salio mal :c\"}",HttpStatus.INTERNAL_SERVER_ERROR);
+                    break;
             }
         } catch (Exception ex) {
             response = new ResponseEntity<>("{\"Error\":\"Algo salio mal :c\"}",HttpStatus.INTERNAL_SERVER_ERROR);
@@ -67,54 +113,24 @@ public class ColaboradorController {
         return response;
     }
 
-    @PostMapping("/addColaboradorF")
-    public ResponseEntity<?> addColaboradorF (@RequestBody ColaboradorEntity colaborador){
-        ResponseEntity<?> response;
-        String respuestaService = this.service.saveColaboradorF(colaborador);
-        try{
-            if(respuestaService.equals("ColaboradoraCorrecta.")) {
-                response = new ResponseEntity<>("{\"Mensaje\":\"Colaboradora creada correctamente\"}", HttpStatus.CREATED);
-            } else if (respuestaService.equals("erroredad")){
-                response = new ResponseEntity<>("{\"Error\":\"La Edad debe ser mayor a 18 y menor de 65'\"}",HttpStatus.BAD_REQUEST);
-            }else{
-                respuestaService.equals("errorsexo");
-                response = new ResponseEntity<>("{\"Error\":\"El sexo no es Femenino'\"}",HttpStatus.BAD_REQUEST);
-            }
-        } catch (Exception ex) {
-            response = new ResponseEntity<>("{\"Error\":\"Algo salio mal :c\"}",HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return response;
-    }
 
 
-    @PostMapping("/addColaboradorM")
-    public ResponseEntity<?> addColaboradorM (@RequestBody ColaboradorEntity colaborador){
-        ResponseEntity<?> response;
-        String respuestaService = this.service.saveColaboradorM(colaborador);
-        try{
-            if(respuestaService.equals("ColaboradorCorrecto.")) {
-                response = new ResponseEntity<>("{\"Mensaje\":\"Colaborador creado correctamente\"}", HttpStatus.CREATED);
-            } else if (respuestaService.equals("erroredad")){
-                response = new ResponseEntity<>("{\"Error\":\"La Edad debe ser mayor a 18 y menor de 60'\"}",HttpStatus.BAD_REQUEST);
-            }else{
-                respuestaService.equals("errorsexo");
-                response = new ResponseEntity<>("{\"Error\":\"El sexo no es Masculino'\"}",HttpStatus.BAD_REQUEST);
-            }
-        } catch (Exception ex) {
-            response = new ResponseEntity<>("{\"Error\":\"Algo salio mal :c\"}",HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return response;
-    }
-
-
-
-    @RequestMapping(value = "/actualizar/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/colaborador/{id}", method = RequestMethod.PUT)
     public ResponseEntity<?> actualizar(@RequestBody ColaboradorEntity colaborador, @PathVariable(value = "id") String id){
         ResponseEntity<?> response;
-        String respuestaService = this.service.updateColaborador(colaborador, id);
-        response = new ResponseEntity<>(respuestaService, HttpStatus.OK);
+        String respuestaService = this.service.updateColaborador(colaborador,id);
+        try {
+            if(respuestaService.equals("update")){
+                response = new ResponseEntity<>(colaborador, HttpStatus.OK);
+            } else {
+                response = new ResponseEntity<>("{\"Error\":\"Colaborador No existe\"}",HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception ex){
+            response = new ResponseEntity<>("{\"Error\":\"Algo salio mal :c\"}",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return response;
     }
-
-
 }
+
+
+

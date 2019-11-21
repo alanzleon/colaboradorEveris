@@ -22,7 +22,8 @@ public class ColaboradorEntity implements Serializable {
     private String id;
 
     private String nombre;
-    private String apellido;
+    private String apellidoPaterno;
+    private String apellidoMaterno;
     private String rut;
     private int edad;
     private String sexo;
