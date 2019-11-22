@@ -27,7 +27,15 @@ public class ColaboradorController {
     private ColaboradorServiceImpls service;
 
     @GetMapping("/colaborador")
-    public String saveColaborador(ColaboradorEntity colaborador) {
+    public ResponseEntity<?> getAll(){
+        ResponseEntity<?> response;
+        try {
+            List<ColaboradorEntity> colaborador = this.service.findColaborador();
+            response = new ResponseEntity<>(colaborador, HttpStatus.OK);
+        } catch (Exception ex) {
+            response = new ResponseEntity<>(mensajeError("Algo salio mal"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return response;
 
     }
 
@@ -41,7 +49,7 @@ public class ColaboradorController {
             response = new ResponseEntity<>(colaborador, HttpStatus.OK);
         }catch (Exception ex) {
             System.out.println(ex);
-            response = new ResponseEntity<>("{\"Error\":\"Algo salio mal :c\"}"+ ex, HttpStatus.INTERNAL_SERVER_ERROR);
+            response = new ResponseEntity<>(mensajeError("Algo salio mal")+ ex, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
 
@@ -56,62 +64,48 @@ public class ColaboradorController {
         try{
             switch (respuestaService) {
                 case "ok":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"Cliente creado correctamente\"}", HttpStatus.CREATED);
+                    response = new ResponseEntity<>(mensaje ("Colaborador creado correctamente"), HttpStatus.CREATED);
                     break;
-                case "NoRut":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Rut\"}", HttpStatus.BAD_REQUEST);
+                case "EmptyRut":
+                    response = new ResponseEntity<>(mensajeError("Falta Rut"), HttpStatus.BAD_REQUEST);
                     break;
-                case "NoEdad":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"Edad debe estar entre 25 y 100\"}", HttpStatus.BAD_REQUEST);
+                case "NoMayoredad":
+                    response = new ResponseEntity<>(mensajeError("Edad debe estar entre 18 y 100"), HttpStatus.BAD_REQUEST);
                     break;
-                case "NoNombre":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Nombre\"}", HttpStatus.BAD_REQUEST);
+                case "EmptyNombre":
+                    response = new ResponseEntity<>(mensajeError("Falta Nombre"), HttpStatus.BAD_REQUEST);
                     break;
-                case "NoApellidoPaterno":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Apellido Paterno\"}", HttpStatus.BAD_REQUEST);
+                case "EmptyApellidoPaterno":
+                    response = new ResponseEntity<>(mensajeError("Falta Apellido Paterno"), HttpStatus.BAD_REQUEST);
                     break;
-                case "noApellidoMaterno":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Apellido Materno\"}", HttpStatus.BAD_REQUEST);
+                case "EmptyApellidoMaterno":
+                    response = new ResponseEntity<>(mensajeError("Falta Apellido Materno"), HttpStatus.BAD_REQUEST);
                     break;
-                case "NoSexo":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Sexo\"}", HttpStatus.BAD_REQUEST);
+                case "EmptySexo":
+                    response = new ResponseEntity<>(mensajeError("Falta Sexo"), HttpStatus.BAD_REQUEST);
                     break;
                 case "InvalidSexo":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"El sexo debe ser Masculino o Femenino\"}", HttpStatus.BAD_REQUEST);
+                    response = new ResponseEntity<>(mensajeError("El sexo debe ser Masculino o Femenino"), HttpStatus.BAD_REQUEST);
                     break;
-                case "NoDireccion":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Direccion\"}", HttpStatus.BAD_REQUEST);
+                case "InvalidSexEd":
+                    response = new ResponseEntity<>(mensajeError("Edad Invalida para sexo: (“Femenino”menor de 60 años y mayor de 18 ) & (“Masculino” menor de 65 y mayor de 18) \u000B"), HttpStatus.BAD_REQUEST);
                     break;
-                case "NoTelefono":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Telefono\"}", HttpStatus.BAD_REQUEST);
-                    break;
-                case "NoTipoLicencia":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta Tipo de licencia\"}", HttpStatus.BAD_REQUEST);
-                    break;
-                case "invalidTipoLicencia":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"El tipo de licencia debe ser 'A', 'B' o 'C'\"}", HttpStatus.BAD_REQUEST);
-                    break;
-                case "noFechaEmision":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta fecha emision licencia\"}", HttpStatus.BAD_REQUEST);
-                    break;
-                case "noFechaVencimiento":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"Falta fecha de vencimiento licencia\"}", HttpStatus.BAD_REQUEST);
+                case "EmptyNivelPermiso":
+                    response = new ResponseEntity<>(mensajeError("Falta Telefono"), HttpStatus.BAD_REQUEST);
                     break;
                 case "invalidRut":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"Ingrese un rut valido\"}", HttpStatus.CREATED);
-                    break;
-                case "invalidTelefono":
-                    response = new ResponseEntity<>("{\"Mensaje\":\"Ingrese un telefono valido\"}", HttpStatus.CREATED);
+                    response = new ResponseEntity<>(mensajeError("Ingrese un rut valido"), HttpStatus.CREATED);
                     break;
                 default:
-                    response = new ResponseEntity<>("{\"Error\":\"Algo salio mal :c\"}",HttpStatus.INTERNAL_SERVER_ERROR);
+                    response = new ResponseEntity<>(mensajeError("Algo salio mal"),HttpStatus.INTERNAL_SERVER_ERROR);
                     break;
             }
         } catch (Exception ex) {
-            response = new ResponseEntity<>("{\"Error\":\"Algo salio mal :c\"}",HttpStatus.INTERNAL_SERVER_ERROR);
+            response = new ResponseEntity<>(mensajeError("Algo salio mal"),HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
     }
+
 
 
 
@@ -130,6 +124,18 @@ public class ColaboradorController {
         }
         return response;
     }
+
+    public String mensajeError(String msjPersonalizado) {
+        return "{\"Error\":\""+msjPersonalizado+"\"}";
+    }
+
+    public String mensaje(String msjPersonalizado) {
+        return "{\"mensaje\":\""+msjPersonalizado+"\"}";
+    }
+
+
+
+
 }
 
 
