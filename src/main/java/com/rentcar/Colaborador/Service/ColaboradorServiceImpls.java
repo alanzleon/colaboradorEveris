@@ -30,7 +30,7 @@ public class ColaboradorServiceImpls implements ColaboradorService {
                                     if (colaborador.getSexo() != null) {
                                         String sexo = colaborador.getSexo().toLowerCase();
                                         if (sexo.equals("masculino") || sexo.equals("femenino")) {
-                                            if (colaborador.getEdad() >= 18 && colaborador.getEdad() < 65){
+                                            if (colaborador.getEdad() >= 18 && colaborador.getEdad() <= 65){
                                                 if (colaborador.getNivelpermiso() != null) {
                                                     String tipoPermiso = colaborador.getNivelpermiso().toLowerCase();
 
@@ -136,7 +136,7 @@ public class ColaboradorServiceImpls implements ColaboradorService {
             if(colaborador.getApellidoMaterno() != null) {
                 colaboradorbd.setApellidoMaterno(colaborador.getApellidoMaterno());
             }
-            if(colaborador.getEdad() >= 25) {
+            if(colaborador.getEdad() >= 18 && colaborador.getEdad() <=100) {
                 colaboradorbd.setEdad(colaborador.getEdad());
             } else {
                 return "invalidEdad";
@@ -144,7 +144,7 @@ public class ColaboradorServiceImpls implements ColaboradorService {
             if (colaborador.getSexo() != null) {
                 String sexo = colaborador.getSexo().toLowerCase();
                 if (sexo.equals("masculino") || sexo.equals("femenino")) {
-                    if (colaborador.getEdad() >= 18 && colaborador.getEdad() < 65){
+                    if (colaborador.getEdad() >= 18 || colaborador.getEdad() <= 65){
                         if (colaborador.getNivelpermiso() != null) {
                             String tipoPermiso = colaborador.getNivelpermiso().toLowerCase();
                             if (tipoPermiso.equals("administrador")) {
