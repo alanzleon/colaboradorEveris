@@ -57,6 +57,8 @@ public class ColaboradorController {
 
 
 
+
+
     @PostMapping("/colaborador")
     public ResponseEntity<?> addCliente (@RequestBody ColaboradorEntity colaborador){
         ResponseEntity<?> response;
@@ -114,13 +116,31 @@ public class ColaboradorController {
         ResponseEntity<?> response;
         String respuestaService = this.service.updateColaborador(colaborador,id);
         try {
-            if(respuestaService.equals("update")){
-                response = new ResponseEntity<>(colaborador, HttpStatus.OK);
-            } else {
-                response = new ResponseEntity<>("{\"Error\":\"Colaborador No existe\"}",HttpStatus.BAD_REQUEST);
+            switch(respuestaService) {
+                case "update":
+                    response = new ResponseEntity<>(colaborador, HttpStatus.OK);
+                    break;
+                case "notfound":
+                    response = new ResponseEntity<>(mensajeError("Cliente No existe"),HttpStatus.NOT_FOUND);
+                    break;
+                case "invalidEdad":
+                    response = new ResponseEntity<>(mensajeError("La edad debe estar entre 18 y 100 años"),HttpStatus.BAD_REQUEST);
+                    break;
+                case "invalidSexo":
+                    response = new ResponseEntity<>(mensajeError("El sexo debe ser Masculino o Femenino"),HttpStatus.BAD_REQUEST);
+                    break;
+                case "invalidTelefono":
+                    response = new ResponseEntity<>(mensajeError("Ingrese un telefono valido"),HttpStatus.BAD_REQUEST);
+                    break;
+                case "invalidTipoLicencia":
+                    response = new ResponseEntity<>(mensajeError("El tipo de licencia debe ser 'A', 'B' o 'C'"),HttpStatus.BAD_REQUEST);
+                    break;
+                default:
+                    response = new ResponseEntity<>(mensajeError("Algo salio mal"),HttpStatus.INTERNAL_SERVER_ERROR);
+                    break;
             }
         } catch (Exception ex){
-            response = new ResponseEntity<>("{\"Error\":\"Algo salio mal :c\"}",HttpStatus.INTERNAL_SERVER_ERROR);
+            response = new ResponseEntity<>(mensajeError(ex.toString()),HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
     }

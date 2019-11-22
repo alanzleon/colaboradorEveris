@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -123,14 +124,55 @@ public class ColaboradorServiceImpls implements ColaboradorService {
 
     @Override
     public String updateColaborador(ColaboradorEntity colaborador, String id) {
+        //Valido que exista el Colaborador
         if(this.colaboradorRepositoryl.findById(id) != null){
-            colaborador.setId(id);
-            this.colaboradorRepositoryl.save(colaborador);
+            ColaboradorEntity colaboradorbd = this.colaboradorRepositoryl.findColaboradorById(id);
+            if(colaborador.getNombre() != null) {
+                colaboradorbd.setNombre(colaborador.getNombre());
+            }
+            if(colaborador.getApellidoPaterno() != null) {
+                colaboradorbd.setApellidoPaterno(colaborador.getApellidoPaterno());
+            }
+            if(colaborador.getApellidoMaterno() != null) {
+                colaboradorbd.setApellidoMaterno(colaborador.getApellidoMaterno());
+            }
+            if(colaborador.getEdad() >= 25) {
+                colaboradorbd.setEdad(colaborador.getEdad());
+            } else {
+                return "invalidEdad";
+            }
+            if (colaborador.getSexo() != null) {
+                String sexo = colaborador.getSexo().toLowerCase();
+                if (sexo.equals("masculino") || sexo.equals("femenino")) {
+                    if (colaborador.getEdad() >= 18 && colaborador.getEdad() < 65){
+                        if (colaborador.getNivelpermiso() != null) {
+                            String tipoPermiso = colaborador.getNivelpermiso().toLowerCase();
+                            if (tipoPermiso.equals("administrador")) {
+                                colaboradorbd.setSueldobase(1000000);
+                            } else if (tipoPermiso.equals("vendedor")) {
+                                colaboradorbd.setSueldobase(750000);
+                            } else {
+                                tipoPermiso.equals("supervisor");
+                                colaboradorbd.setSueldobase(1500000);
+                            }
+
+                        } else {
+                            return "EmptyNivelPermiso";
+                        }
+                    }else{
+                        return "InvalidSexEd";
+                    }
+
+                } else {
+                    return "InvalidSexo";
+                }
+            }
+
+            this.colaboradorRepositoryl.save(colaboradorbd);
             return "update";
         } else {
-            return "updateError";
+            return "notFound";
         }
-
     }
 
 
