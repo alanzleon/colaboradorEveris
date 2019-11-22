@@ -28,54 +28,51 @@ public class ColaboradorServiceImpls implements ColaboradorService {
                                 if (colaborador.getApellidoMaterno() != null) {
                                     if (colaborador.getSexo() != null) {
                                         String sexo = colaborador.getSexo().toLowerCase();
-
                                         if (sexo.equals("masculino") || sexo.equals("femenino")) {
-
                                             if (colaborador.getEdad() >= 18 && colaborador.getEdad() < 65){
+                                                if (colaborador.getNivelpermiso() != null) {
+                                                    String tipoPermiso = colaborador.getNivelpermiso().toLowerCase();
 
-                                                }else{
-                                                    return "";
-                                                }
-                                                colaborador.setSexo(sexo);
-                                                colaborador.setEdad();
-                                                 if (colaborador.getNivelpermiso() != null) {
-                                                String tipoPermiso = colaborador.getNivelpermiso().toLowerCase();
-                                                     if (tipoPermiso.equals("administrador")) {
-                                                    colaborador.setSueldobase(1000000);
-                                                        } else if (tipoPermiso.equals("vendedor")) {
-                                                    colaborador.setSueldobase(750000);
-                                                        } else {
-                                                    tipoPermiso.equals("supervisor");
-                                                    colaborador.setSueldobase(1500000);
+                                                    if (tipoPermiso.equals("administrador")) {
+                                                        colaborador.setSueldobase(1000000);
+                                                    } else if (tipoPermiso.equals("vendedor")) {
+                                                        colaborador.setSueldobase(750000);
+                                                    } else {
+                                                        tipoPermiso.equals("supervisor");
+                                                        colaborador.setSueldobase(1500000);
+                                                    }
                                                     this.colaboradorRepositoryl.save(colaborador);
-                                                     }
 
-                                                 } else {
-                                                return "NoNivelPermiso";
-                                                 }
+                                                } else {
+                                                    return "EmptyNivelPermiso";
+                                                }
+                                            }else{
+                                                return "InvalidSexEd";
+                                            }
+
                                         } else {
-                                            return "NoSexo";
+                                            return "InvalidSexo";
                                         }
                                     } else {
-                                        return "InvalidSexo";
+                                        return "EmptySexo";
                                     }
                                 } else {
-                                    return "noApellidoMaterno";
+                                    return "EmptyApellidoMaterno";
                                 }
                             } else {
-                                return "NoApellidoPaterno";
+                                return "EmptyApellidoPaterno";
                             }
                         } else {
-                            return "NoNombre";
+                            return "EmptyNombre";
                         }
                     } else {
-                        return "NoEdad";
+                        return "NoMayoredad";
                     }
                 } else {
                     return "invalidRut";
                 }
             } else {
-                return "NoRut";
+                return "EmptyRut";
             }
         } catch (Exception ex) {
             return "" + ex;
