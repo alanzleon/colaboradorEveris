@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 @Slf4j
 @Data
-@Document(collection = "colaborador")
+@Document(collection = "colaboradores")
 public class ColaboradorEntity implements Serializable {
 
     private static final long serialVersionUID = -1L;

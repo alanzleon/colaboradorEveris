@@ -41,11 +41,11 @@ public class ColaboradorController {
 
 
 
-    @GetMapping("/colaborador/¨{id}")
-    public ResponseEntity<?> getColaboradorById(String id){
+    @GetMapping("/colaborador/{rut}")
+    public ResponseEntity<?> getColaboradorByRut(@PathVariable(value = "rut") String rut){
         ResponseEntity<?> response;
         try{
-            ColaboradorEntity colaborador = this.service.findColaboradorById(id);
+            ColaboradorEntity colaborador = this.service.findColaboradorByRut(rut);
             response = new ResponseEntity<>(colaborador, HttpStatus.OK);
         }catch (Exception ex) {
             System.out.println(ex);
@@ -71,6 +71,9 @@ public class ColaboradorController {
                 case "EmptyRut":
                     response = new ResponseEntity<>(mensajeError("Falta Rut"), HttpStatus.BAD_REQUEST);
                     break;
+                case "invalidRut":
+                    response = new ResponseEntity<>(mensajeError("Ingrese un rut valido"), HttpStatus.CREATED);
+                    break;
                 case "NoMayoredad":
                     response = new ResponseEntity<>(mensajeError("Edad debe estar entre 18 y 100"), HttpStatus.BAD_REQUEST);
                     break;
@@ -90,13 +93,13 @@ public class ColaboradorController {
                     response = new ResponseEntity<>(mensajeError("El sexo debe ser Masculino o Femenino"), HttpStatus.BAD_REQUEST);
                     break;
                 case "InvalidSexEd":
-                    response = new ResponseEntity<>(mensajeError("Edad Invalida para sexo: (“Femenino”menor de 60 años y mayor de 18 ) & (“Masculino” menor de 65 y mayor de 18) \u000B"), HttpStatus.BAD_REQUEST);
+                    response = new ResponseEntity<>(mensajeError("Edad Invalida para sexo: (“Femenino” mayor de 18 y menor de 60 años) & (“Masculino”  mayor de 18 y menor de 65 ) \u000B"), HttpStatus.BAD_REQUEST);
                     break;
                 case "EmptyNivelPermiso":
-                    response = new ResponseEntity<>(mensajeError("Falta Telefono"), HttpStatus.BAD_REQUEST);
+                    response = new ResponseEntity<>(mensajeError("Falta nivelpermiso"), HttpStatus.BAD_REQUEST);
                     break;
-                case "invalidRut":
-                    response = new ResponseEntity<>(mensajeError("Ingrese un rut valido"), HttpStatus.CREATED);
+                case "invalidNivelPermiso":
+                    response = new ResponseEntity<>(mensajeError("El Nivel de Permiso debe ser 'Administrado', 'Supervisor' o 'Vendedor'"), HttpStatus.BAD_REQUEST);
                     break;
                 default:
                     response = new ResponseEntity<>(mensajeError("Algo salio mal"),HttpStatus.INTERNAL_SERVER_ERROR);
@@ -133,7 +136,7 @@ public class ColaboradorController {
                     response = new ResponseEntity<>(mensajeError("Ingrese un telefono valido"),HttpStatus.BAD_REQUEST);
                     break;
                 case "invalidTipoLicencia":
-                    response = new ResponseEntity<>(mensajeError("El tipo de licencia debe ser 'A', 'B' o 'C'"),HttpStatus.BAD_REQUEST);
+                    response = new ResponseEntity<>(mensajeError("El Nivel de Permiso debe ser 'Vendedor', 'Administrador' o 'Supervisor'"),HttpStatus.BAD_REQUEST);
                     break;
                 default:
                     response = new ResponseEntity<>(mensajeError("Algo salio mal"),HttpStatus.INTERNAL_SERVER_ERROR);

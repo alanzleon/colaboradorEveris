@@ -10,9 +10,13 @@ public interface ColaboradorService {
     String saveColaborador(ColaboradorEntity Colaborador);
     List<ColaboradorEntity> findColaborador();
     String updateColaborador (ColaboradorEntity Colaborador, String id);
+    ColaboradorEntity findColaboradorByRut(String rut);
+
+/*
     ColaboradorEntity findColaboradorById(String id);
-/*    String saveColaboradorF(ColaboradorEntity Colaborador);
+    String saveColaboradorF(ColaboradorEntity Colaborador);
     String saveColaboradorM(ColaboradorEntity Colaborador);
     String saveNivelPermiso(ColaboradorEntity Colaborador);
+
 */
 }

@@ -17,6 +17,7 @@ public class ColaboradorServiceImpls implements ColaboradorService {
     @Autowired
     private ColaboradorRepository colaboradorRepositoryl;
 
+    String[] nivelPermiso = {"administrador","supervisor","vendedor"};
 
     @Override
     public String saveColaborador(ColaboradorEntity colaborador) {
@@ -29,11 +30,41 @@ public class ColaboradorServiceImpls implements ColaboradorService {
                                 if (colaborador.getApellidoMaterno() != null) {
                                     if (colaborador.getSexo() != null) {
                                         String sexo = colaborador.getSexo().toLowerCase();
-                                        if (sexo.equals("masculino") || sexo.equals("femenino")) {
+                                        if (sexo.equals("masculino")) {
                                             if (colaborador.getEdad() >= 18 && colaborador.getEdad() <= 65){
+
+                                                if (colaborador.getNivelpermiso() != null) {
+
+                                                    String NivelPermiso = colaborador.getNivelpermiso().toLowerCase();
+                                                    colaborador.setNivelpermiso(NivelPermiso);
+
+                                                        if(Arrays.asList(nivelPermiso).contains(NivelPermiso)){
+                                                            if (NivelPermiso.equals("administrador" )) {
+                                                                colaborador.setSueldobase(1000000);
+                                                            } else if (NivelPermiso.equals("vendedor" )) {
+                                                                colaborador.setSueldobase(750000);
+                                                            } else {
+                                                                NivelPermiso.equals("supervisor" );
+                                                                colaborador.setSueldobase(1500000);
+                                                            }
+
+                                                            this.colaboradorRepositoryl.save(colaborador);
+
+                                                        } else {
+                                                            return "InvalidNivelPermiso";
+                                                        }
+                                                    } else {
+                                                        return "EmptyNivelPermiso";
+                                                    }
+
+
+
+                                            }
+                                        } else if (sexo.equals("femenino")) {
+                                            if (colaborador.getEdad() >= 18 && colaborador.getEdad() <= 65){
+
                                                 if (colaborador.getNivelpermiso() != null) {
                                                     String tipoPermiso = colaborador.getNivelpermiso().toLowerCase();
-
                                                     if (tipoPermiso.equals("administrador")) {
                                                         colaborador.setSueldobase(1000000);
                                                     } else if (tipoPermiso.equals("vendedor")) {
@@ -47,10 +78,7 @@ public class ColaboradorServiceImpls implements ColaboradorService {
                                                 } else {
                                                     return "EmptyNivelPermiso";
                                                 }
-                                            }else{
-                                                return "InvalidSexEd";
                                             }
-
                                         } else {
                                             return "InvalidSexo";
                                         }
@@ -80,6 +108,14 @@ public class ColaboradorServiceImpls implements ColaboradorService {
         }
         return "ok";
     }
+
+    @Override
+    public ColaboradorEntity findColaboradorByRut (String rut) {
+        String rutFormateado = formatearRut(rut);
+        return  this.colaboradorRepositoryl.findColaboradorByRut(rutFormateado);
+    }
+
+
 /*
     @Override
     public String saveColaboradorF(ColaboradorEntity Colaborador) {
@@ -176,10 +212,39 @@ public class ColaboradorServiceImpls implements ColaboradorService {
     }
 
 
-    @Override
-    public ColaboradorEntity findColaboradorById (@PathVariable String idColaborador) {
-        return  this.colaboradorRepositoryl.findById(idColaborador).get();
+
+
+    public boolean clienteExist(String rut){
+        if (this.colaboradorRepositoryl.findColaboradorByRut(rut) == null){
+            return false;
+        }else{
+            return true;
+        }
     }
+
+
+    public String formatearRut(String rut){
+        int cont=0;
+        String format;
+        if (rut.length() == 0){
+            return "";
+        }else{
+            rut = rut.replace(".","");
+            rut = rut.replace("-","");
+            format = "-"+rut.substring(rut.length()-1);
+            for (int i = rut.length()-2;i>=0;i--){
+                format = rut.substring(i,i+1)+format;
+                cont++;
+                if (cont==3 && i !=0){
+                    format = "."+format;
+                    cont=0;
+                }
+            }
+            return format;
+        }
+    }
+
+
 
     public boolean validarRut(String rut) {
 
@@ -210,6 +275,26 @@ public class ColaboradorServiceImpls implements ColaboradorService {
         Pattern pattern = Pattern.compile("^(\\+?56)?(\\s?)(0?9)(\\s?)[9876543]\\d{7}$");
         return pattern.matcher(telefono).matches();
     }
+
+
+    /*
+                                                if (colaborador.getNivelpermiso() != null) {
+                                                    String tipoPermiso = colaborador.getNivelpermiso().toLowerCase();
+                                                    if (tipoPermiso.equals("administrador")) {
+                                                        colaborador.setSueldobase(1000000);
+                                                    } else if (tipoPermiso.equals("vendedor")) {
+                                                        colaborador.setSueldobase(750000);
+                                                    } else {
+                                                        tipoPermiso.equals("supervisor");
+                                                        colaborador.setSueldobase(1500000);
+                                                    }
+                                                    this.colaboradorRepositoryl.save(colaborador);
+
+                                                } else {
+                                                    return "EmptyNivelPermiso";
+                                                }
+                                            */
+
 
 }
 
