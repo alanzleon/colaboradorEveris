@@ -31,9 +31,9 @@ public class ColaboradorEntity implements Serializable {
     private String sexo;
     private String nivelpermiso;    //(Supervisor, Vendedor o Administrador)
     private LocalDate fechincorporacion; //(Fecha)
-    private int sueldobase;    //(Supervisor = 1.500.000, Administrador = 1.000.000, Vendedor = 750.000)
+    private double sueldobase;    //(Supervisor = 1.500.000, Administrador = 1.000.000, Vendedor = 750.000)
     private double bonoservicio; // (%)
-    //private double sueldoTotal;
+
 
 
 

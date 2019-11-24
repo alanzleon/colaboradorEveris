@@ -91,6 +91,9 @@ public class ColaboradorController {
                 case "EmptySexo":
                     response = new ResponseEntity<>(mensajeError("Falta sexo"), HttpStatus.BAD_REQUEST);
                     break;
+                case "InvalidSexo":
+                    response = new ResponseEntity<>(mensajeError("El sexo debe ser Masculino o Femenino"), HttpStatus.BAD_REQUEST);
+                    break;
                 case "InvalidSexoM":
                     response = new ResponseEntity<>(mensajeError("El sexo Masculino deve tener la Edad  entre 18 y 65"), HttpStatus.BAD_REQUEST);
                     break;
@@ -110,7 +113,7 @@ public class ColaboradorController {
                     response = new ResponseEntity<>(mensajeError("El Nivel de Permiso Femenino debe ser 'Administrado', 'Supervisor' o 'Vendedor'"), HttpStatus.BAD_REQUEST);
                     break;
                 case "ok":
-                    response = new ResponseEntity<>(mensajeError("Colaborador creado correctamente"), HttpStatus.CREATED);
+                    response = new ResponseEntity<>(mensajeCreado("Colaborador creado correctamente"), HttpStatus.CREATED);
                     break;
                 default:
                     response = new ResponseEntity<>(mensajeError("Algo salio mal"),HttpStatus.INTERNAL_SERVER_ERROR);
@@ -162,6 +165,12 @@ public class ColaboradorController {
     public String mensajeError(String msjPersonalizado) {
         return "{\"Error\":\""+msjPersonalizado+"\"}";
     }
+
+    public String mensajeCreado(String msjPersonalizado) {
+        return "{\"Creado\":\""+msjPersonalizado+"\"}";
+    }
+
+
 
     public String mensaje(String msjPersonalizado) {
         return "{\"mensaje\":\""+msjPersonalizado+"\"}";
