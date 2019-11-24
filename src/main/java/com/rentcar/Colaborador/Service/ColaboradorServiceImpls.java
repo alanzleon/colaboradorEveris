@@ -32,9 +32,9 @@ public class ColaboradorServiceImpls implements ColaboradorService {
                 if (colaborador.getApellidoPaterno() != null) {
                     if (colaborador.getApellidoMaterno() != null) {
                         if (colaborador.getRut() != null) {
-                            if (validarRut(colaborador.getRut())) {
-                                if (colaboradorExist(colaborador.getRut())){
-                                    colaborador.setRut(formatearRut(colaborador.getRut()));
+
+                              // colaborador.setRut(formatearRut(colaborador.getRut()));
+
                                     if (colaborador.getEdad() != 0){
                                         if (colaborador.getEdad() >= 18 && colaborador.getEdad() < 100) {
                                             if (colaborador.getSexo() != null) {
@@ -55,11 +55,12 @@ public class ColaboradorServiceImpls implements ColaboradorService {
 
                                                                     Period años = Period.between(fechaInicio, fechaActual);
                                                                     int añosEntreFechas = años.getYears();
-                                                                    double sueldoBase = colaborador.getSueldobase();
-                                                                    double bono = (añosEntreFechas*0.2);
-                                                                    double sueldoMasBono = (sueldoBase+((sueldoBase*bono)/100));
-                                                                    colaborador.setBonoservicio(Math.round(bono));
-                                                                    colaborador.setSueldobase(Math.round(sueldoMasBono));
+                                                                    int sueldoBase = colaborador.getSueldobase();
+                                                                    int anioServicio = sueldoBase*12;
+                                                                    double bono = (anioServicio*0.2);
+                                                                    double sueldoMasBono = (sueldoBase+bono);
+                                                                    colaborador.setBonoservicio(bono);
+                                                                    colaborador.setSueldoMasBono(sueldoMasBono);
 
 
                                                                 } else if (NivelPermiso.equals("vendedor" )) {
@@ -70,31 +71,33 @@ public class ColaboradorServiceImpls implements ColaboradorService {
 
                                                                     Period años = Period.between(fechaInicio, fechaActual);
                                                                     int añosEntreFechas = años.getYears();
-                                                                    double sueldoBase = colaborador.getSueldobase();
-                                                                    double bono = ((añosEntreFechas*0.2)/100);
-                                                                    double sueldoMasBono = (sueldoBase+((sueldoBase*bono)/100));
-                                                                    colaborador.setBonoservicio(Math.round(bono));
-                                                                    colaborador.setSueldobase(Math.round(sueldoMasBono));
+                                                                    int sueldoBase = colaborador.getSueldobase();
+                                                                    int anioServicio = sueldoBase*12;
+                                                                    double bono = (anioServicio*0.2);
+                                                                    double sueldoMasBono = (sueldoBase+bono);
+                                                                    colaborador.setBonoservicio(bono);
+                                                                    colaborador.setSueldoMasBono(sueldoMasBono);
 
                                                                 } else {
                                                                     NivelPermiso.equals("supervisor" );
                                                                     colaborador.setSueldobase(1500000);
 
                                                                     LocalDate fechaInicio = colaborador.getFechincorporacion();
-
                                                                     LocalDate fechaActual = LocalDate.now();
 
                                                                     Period años = Period.between(fechaInicio, fechaActual);
                                                                     int añosEntreFechas = años.getYears();
-                                                                    double sueldoBase = colaborador.getSueldobase();
-                                                                    double bono = (añosEntreFechas*0.2);
-                                                                    double sueldoMasBono = (sueldoBase+((sueldoBase*bono)/100));
-                                                                    colaborador.setBonoservicio(Math.round(bono));
-                                                                    colaborador.setSueldobase(Math.round(sueldoMasBono));
+                                                                    int sueldoBase = colaborador.getSueldobase();
+                                                                    int anioServicio = sueldoBase*12;
+                                                                    double bono = (anioServicio*0.2);
+                                                                    double sueldoMasBono = (sueldoBase+bono);
+                                                                    colaborador.setBonoservicio(bono);
+                                                                    colaborador.setSueldoMasBono(sueldoMasBono);
 
                                                                 }
 
                                                                 this.colaboradorRepositoryl.save(colaborador);
+
 
                                                             } else {
                                                                 return "InvalidobtenerPermisoM";
@@ -128,6 +131,7 @@ public class ColaboradorServiceImpls implements ColaboradorService {
 
 
 
+
                                                             } else {
                                                                 return "InvalidobtenerPermisoF";
                                                             }
@@ -148,19 +152,9 @@ public class ColaboradorServiceImpls implements ColaboradorService {
                                         return "Emptyedad";
                                     }
 
-
-
-                                } else{
-                                    return "rutExistente";
-                                }
-
-                            } else {
-                                return "invalidRut";
-                            }
                         } else {
                             return "EmptyRut";
                         }
-
                     } else {
                         return "EmptyApellidoMaterno";
                     }

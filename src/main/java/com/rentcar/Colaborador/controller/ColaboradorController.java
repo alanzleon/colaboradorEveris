@@ -79,6 +79,9 @@ public class ColaboradorController {
                 case "EmptyRut":
                     response = new ResponseEntity<>(mensajeError("Falta rut"), HttpStatus.BAD_REQUEST);
                     break;
+                case "rutExistente":
+                    response = new ResponseEntity<>(mensajeError("El rut ya existe, Intente otro"), HttpStatus.BAD_REQUEST);
+                    break;
                 case "invalidRut":
                     response = new ResponseEntity<>(mensajeError("Ingrese un rut valido, respetando '.' y '-' "), HttpStatus.CREATED);
                     break;
