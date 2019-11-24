@@ -59,47 +59,58 @@ public class ColaboradorController {
 
 
 
+
+
     @PostMapping("/colaborador")
     public ResponseEntity<?> addCliente (@RequestBody ColaboradorEntity colaborador){
         ResponseEntity<?> response;
         String respuestaService = this.service.saveColaborador(colaborador);
         try{
             switch (respuestaService) {
-                case "ok":
-                    response = new ResponseEntity<>(mensaje ("Colaborador creado correctamente"), HttpStatus.CREATED);
+                case "EmptyNombre":
+                    response = new ResponseEntity<>(mensajeError("Falta nombre"), HttpStatus.BAD_REQUEST);
+                    break;
+                case "EmptyApellidoPaterno":
+                    response = new ResponseEntity<>(mensajeError("Falta apellidoPaterno"), HttpStatus.BAD_REQUEST);
+                    break;
+                case "EmptyApellidoMaterno":
+                    response = new ResponseEntity<>(mensajeError("Falta apellidoMaterno"), HttpStatus.BAD_REQUEST);
                     break;
                 case "EmptyRut":
-                    response = new ResponseEntity<>(mensajeError("Falta Rut"), HttpStatus.BAD_REQUEST);
+                    response = new ResponseEntity<>(mensajeError("Falta rut"), HttpStatus.BAD_REQUEST);
                     break;
                 case "invalidRut":
-                    response = new ResponseEntity<>(mensajeError("Ingrese un rut valido"), HttpStatus.CREATED);
+                    response = new ResponseEntity<>(mensajeError("Ingrese un rut valido, respetando '.' y '-' "), HttpStatus.CREATED);
+                    break;
+                case "Emptyedad":
+                    response = new ResponseEntity<>(mensajeError("falta edad"), HttpStatus.BAD_REQUEST);
                     break;
                 case "NoMayoredad":
                     response = new ResponseEntity<>(mensajeError("Edad debe estar entre 18 y 100"), HttpStatus.BAD_REQUEST);
                     break;
-                case "EmptyNombre":
-                    response = new ResponseEntity<>(mensajeError("Falta Nombre"), HttpStatus.BAD_REQUEST);
-                    break;
-                case "EmptyApellidoPaterno":
-                    response = new ResponseEntity<>(mensajeError("Falta Apellido Paterno"), HttpStatus.BAD_REQUEST);
-                    break;
-                case "EmptyApellidoMaterno":
-                    response = new ResponseEntity<>(mensajeError("Falta Apellido Materno"), HttpStatus.BAD_REQUEST);
-                    break;
                 case "EmptySexo":
-                    response = new ResponseEntity<>(mensajeError("Falta Sexo"), HttpStatus.BAD_REQUEST);
+                    response = new ResponseEntity<>(mensajeError("Falta sexo"), HttpStatus.BAD_REQUEST);
                     break;
-                case "InvalidSexo":
-                    response = new ResponseEntity<>(mensajeError("El sexo debe ser Masculino o Femenino"), HttpStatus.BAD_REQUEST);
+                case "InvalidSexoM":
+                    response = new ResponseEntity<>(mensajeError("El sexo Masculino deve tener la Edad  entre 18 y 65"), HttpStatus.BAD_REQUEST);
                     break;
-                case "InvalidSexEd":
-                    response = new ResponseEntity<>(mensajeError("Edad Invalida para sexo: (“Femenino” mayor de 18 y menor de 60 años) & (“Masculino”  mayor de 18 y menor de 65 ) \u000B"), HttpStatus.BAD_REQUEST);
+                case "InvalidSexoF":
+                    response = new ResponseEntity<>(mensajeError("El sexo Femenino deve tener la Edad  entre 18 y 60"), HttpStatus.BAD_REQUEST);
                     break;
-                case "EmptyNivelPermiso":
-                    response = new ResponseEntity<>(mensajeError("Falta nivelpermiso"), HttpStatus.BAD_REQUEST);
+                case "EmptyNivelPermisoM":
+                    response = new ResponseEntity<>(mensajeError("Falta nivelpermiso (M)"), HttpStatus.BAD_REQUEST);
                     break;
-                case "invalidNivelPermiso":
-                    response = new ResponseEntity<>(mensajeError("El Nivel de Permiso debe ser 'Administrado', 'Supervisor' o 'Vendedor'"), HttpStatus.BAD_REQUEST);
+                case "InvalidobtenerPermisoM":
+                    response = new ResponseEntity<>(mensajeError("El Nivel de Permiso Masculino debe ser 'Administrado', 'Supervisor' o 'Vendedor'"), HttpStatus.BAD_REQUEST);
+                    break;
+                case "EmptyNivelPermisoF":
+                    response = new ResponseEntity<>(mensajeError("Falta nivelpermiso (F)"), HttpStatus.BAD_REQUEST);
+                    break;
+                case "InvalidobtenerPermisoF":
+                    response = new ResponseEntity<>(mensajeError("El Nivel de Permiso Femenino debe ser 'Administrado', 'Supervisor' o 'Vendedor'"), HttpStatus.BAD_REQUEST);
+                    break;
+                case "ok":
+                    response = new ResponseEntity<>(mensajeError("Colaborador creado correctamente"), HttpStatus.CREATED);
                     break;
                 default:
                     response = new ResponseEntity<>(mensajeError("Algo salio mal"),HttpStatus.INTERNAL_SERVER_ERROR);

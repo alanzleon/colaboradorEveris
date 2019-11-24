@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -21,22 +23,25 @@ public class ColaboradorServiceImpls implements ColaboradorService {
 
     @Override
     public String saveColaborador(ColaboradorEntity colaborador) {
+
+
+
         try {
-            if (colaborador.getRut() != null) {
-                if (validarRut(colaborador.getRut())) {
-                    if (colaborador.getEdad() >= 18 && colaborador.getEdad() < 100) {
-                        if (colaborador.getNombre() != null) {
-                            if (colaborador.getApellidoPaterno() != null) {
-                                if (colaborador.getApellidoMaterno() != null) {
-                                    if (colaborador.getSexo() != null) {
-                                        String sexo = colaborador.getSexo().toLowerCase();
-                                        if (sexo.equals("masculino")) {
-                                            if (colaborador.getEdad() >= 18 && colaborador.getEdad() <= 65){
+            if (colaborador.getNombre() != null) {
+                if (colaborador.getApellidoPaterno() != null) {
+                    if (colaborador.getApellidoMaterno() != null) {
+                        if (colaborador.getRut() != null) {
+                            if (validarRut(colaborador.getRut())) {
+                                if (colaborador.getEdad() != 0){
+                                    if (colaborador.getEdad() >= 18 && colaborador.getEdad() < 100) {
+                                        if (colaborador.getSexo() != null) {
+                                            String sexo = colaborador.getSexo().toLowerCase();
+                                            if (sexo.equals("masculino")) {
+                                                if (colaborador.getEdad() >= 18 && colaborador.getEdad() <= 65){
+                                                    if (colaborador.getNivelpermiso() != null) {
 
-                                                if (colaborador.getNivelpermiso() != null) {
-
-                                                    String NivelPermiso = colaborador.getNivelpermiso().toLowerCase();
-                                                    colaborador.setNivelpermiso(NivelPermiso);
+                                                        String NivelPermiso = colaborador.getNivelpermiso().toLowerCase();
+                                                        colaborador.setNivelpermiso(NivelPermiso);
 
                                                         if(Arrays.asList(nivelPermiso).contains(NivelPermiso)){
                                                             if (NivelPermiso.equals("administrador" )) {
@@ -51,57 +56,68 @@ public class ColaboradorServiceImpls implements ColaboradorService {
                                                             this.colaboradorRepositoryl.save(colaborador);
 
                                                         } else {
-                                                            return "InvalidNivelPermiso";
+                                                            return "InvalidobtenerPermisoM";
                                                         }
                                                     } else {
-                                                        return "EmptyNivelPermiso";
+                                                        return "EmptyNivelPermisoM";
                                                     }
-
-
-
-                                            }
-                                        } else if (sexo.equals("femenino")) {
-                                            if (colaborador.getEdad() >= 18 && colaborador.getEdad() <= 65){
-
-                                                if (colaborador.getNivelpermiso() != null) {
-                                                    String tipoPermiso = colaborador.getNivelpermiso().toLowerCase();
-                                                    if (tipoPermiso.equals("administrador")) {
-                                                        colaborador.setSueldobase(1000000);
-                                                    } else if (tipoPermiso.equals("vendedor")) {
-                                                        colaborador.setSueldobase(750000);
-                                                    } else {
-                                                        tipoPermiso.equals("supervisor");
-                                                        colaborador.setSueldobase(1500000);
-                                                    }
-                                                    this.colaboradorRepositoryl.save(colaborador);
-
-                                                } else {
-                                                    return "EmptyNivelPermiso";
                                                 }
+                                                return "InvalidSexoM";
+
+                                            } else if (sexo.equals("femenino")) {
+                                                if (colaborador.getEdad() >= 18 && colaborador.getEdad() <= 60){
+                                                    if (colaborador.getNivelpermiso() != null) {
+                                                        String NivelPermiso = colaborador.getNivelpermiso().toLowerCase();
+                                                        colaborador.setNivelpermiso(NivelPermiso);
+                                                        if(Arrays.asList(nivelPermiso).contains(NivelPermiso)){
+                                                            
+                                                            if (NivelPermiso.equals("administrador" )) {
+                                                                colaborador.setSueldobase(1000000);
+                                                            } else if (NivelPermiso.equals("vendedor" )) {
+                                                                colaborador.setSueldobase(750000);
+                                                            } else {
+                                                                NivelPermiso.equals("supervisor" );
+                                                                colaborador.setSueldobase(1500000);
+                                                            }
+
+
+
+                                                        } else {
+                                                            return "InvalidobtenerPermisoF";
+                                                        }
+                                                    } else {
+                                                        return "EmptyNivelPermisoF";
+                                                    }
+                                                }
+                                                return "InvalidSexoF";
+
+                                            } else {
+                                                this.colaboradorRepositoryl.save(colaborador);
                                             }
                                         } else {
-                                            return "InvalidSexo";
+                                            return "EmptySexo";
                                         }
-                                    } else {
-                                        return "EmptySexo";
+                                    }else{
+                                    return "NoMayoredad";
                                     }
                                 } else {
-                                    return "EmptyApellidoMaterno";
+                                    return "Emptyedad";
                                 }
                             } else {
-                                return "EmptyApellidoPaterno";
+                                return "invalidRut";
                             }
                         } else {
-                            return "EmptyNombre";
+                            return "EmptyRut";
                         }
+
                     } else {
-                        return "NoMayoredad";
+                        return "EmptyApellidoMaterno";
                     }
                 } else {
-                    return "invalidRut";
+                    return "EmptyApellidoPaterno";
                 }
             } else {
-                return "EmptyRut";
+                return "EmptyNombre";
             }
         } catch (Exception ex) {
             return "" + ex;
@@ -114,7 +130,25 @@ public class ColaboradorServiceImpls implements ColaboradorService {
         String rutFormateado = formatearRut(rut);
         return  this.colaboradorRepositoryl.findColaboradorByRut(rutFormateado);
     }
+        /*
+    @Override
+    public double saveFecha(ColaboradorEntity colaborador) {
 
+        LocalDate fechaInicio = colaborador.getFechincorporacion();
+        LocalDate fechaActual = LocalDate.now();
+
+        Period años = Period.between(fechaInicio, fechaActual);
+        int añosEntreFechas = años.getYears();
+        double sueldoBase = colaborador.getSueldobase();
+        double bono = (double) (añosEntreFechas*0.2);
+        double sueldoMasBono = (sueldoBase+((sueldoBase*bono)/100));
+        colaborador.setBonoservicio((float) bono);
+        colaborador.setSueldoTotal(sueldoMasBono);
+
+
+        return sueldoMasBono;
+    }
+        */
 
 /*
     @Override

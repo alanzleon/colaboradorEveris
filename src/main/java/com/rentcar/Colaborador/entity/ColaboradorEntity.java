@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
+
 @Slf4j
 @Data
 @Document(collection = "colaboradores")
@@ -30,7 +32,8 @@ public class ColaboradorEntity implements Serializable {
     private String nivelpermiso;    //(Supervisor, Vendedor o Administrador)
     private LocalDate fechincorporacion; //(Fecha)
     private int sueldobase;    //(Supervisor = 1.500.000, Administrador = 1.000.000, Vendedor = 750.000)
-    private float bonoservicio; // (%)
+    private double bonoservicio; // (%)
+    //private double sueldoTotal;
 
 
 

@@ -11,6 +11,7 @@ public interface ColaboradorService {
     List<ColaboradorEntity> findColaborador();
     String updateColaborador (ColaboradorEntity Colaborador, String id);
     ColaboradorEntity findColaboradorByRut(String rut);
+   // double saveFecha(ColaboradorEntity Colaborador);
 
 /*
     ColaboradorEntity findColaboradorById(String id);
