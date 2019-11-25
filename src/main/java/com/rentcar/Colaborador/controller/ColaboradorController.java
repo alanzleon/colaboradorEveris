@@ -119,7 +119,7 @@ public class ColaboradorController {
                     response = new ResponseEntity<>(mensajeCreado("Colaborador creado correctamente"), HttpStatus.CREATED);
                     break;
                 default:
-                    response = new ResponseEntity<>(mensajeError("Algo salio mal"),HttpStatus.INTERNAL_SERVER_ERROR);
+                    response = new ResponseEntity<>(mensaje(respuestaService),HttpStatus.INTERNAL_SERVER_ERROR);
                     break;
             }
         } catch (Exception ex) {
@@ -145,6 +145,12 @@ public class ColaboradorController {
                     break;
                 case "invalidEdad":
                     response = new ResponseEntity<>(mensajeError("La edad debe estar entre 18 y 100 años"),HttpStatus.BAD_REQUEST);
+                    break;
+                case "InvalidEdadM":
+                    response = new ResponseEntity<>(mensajeError("La edad debe estar entre 18 y 65 años"),HttpStatus.BAD_REQUEST);
+                    break;
+                case "InvalidEdadF":
+                    response = new ResponseEntity<>(mensajeError("La edad debe estar entre 18 y 60 años"),HttpStatus.BAD_REQUEST);
                     break;
                 case "InvalidSexo":
                     response = new ResponseEntity<>(mensajeError("El sexo debe ser Masculino o Femenino"), HttpStatus.BAD_REQUEST);
