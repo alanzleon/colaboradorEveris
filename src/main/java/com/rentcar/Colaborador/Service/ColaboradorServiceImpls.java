@@ -271,6 +271,7 @@ public class ColaboradorServiceImpls implements ColaboradorService {
             if(colaborador.getSexo() != null ){
                 String sexo = colaborador.getSexo().toLowerCase();
                 colaboradorbd.setSexo(colaborador.getSexo());
+                
                 if (sexo.equals("masculino")) {
                     if (colaborador.getEdad() >= 18 && colaborador.getEdad() <= 65) {
                         colaboradorbd.setEdad(colaborador.getEdad());
@@ -288,6 +289,15 @@ public class ColaboradorServiceImpls implements ColaboradorService {
                 return "InvalidSexo";
             }
 
+            this.colaboradorRepositoryl.save(colaboradorbd);
+            return "update";
+        } else {
+            return "notFound";
+        }
+    }
+
+
+            /*
             //Nivel de permiso && Fecha inicio
             if(colaborador.getNivelpermiso() != null && colaborador.getFechincorporacion() != null) {
                 String nivelPErmiso = colaborador.getNivelpermiso().toLowerCase();
@@ -382,6 +392,8 @@ public class ColaboradorServiceImpls implements ColaboradorService {
 
 
 
+
+
                 if  (colaborador.getFechincorporacion() != null){
 
                     LocalDate fechaInicio = colaboradorbd.getFechincorporacion();
@@ -399,12 +411,12 @@ public class ColaboradorServiceImpls implements ColaboradorService {
 
                 }
 
-            this.colaboradorRepositoryl.save(colaboradorbd);
-            return "update";
-        } else {
-            return "notFound";
-        }
-    }
+                */
+
+
+
+
+
 
 
     public String formatearRut(String rut) {
@@ -427,6 +439,8 @@ public class ColaboradorServiceImpls implements ColaboradorService {
             return format;
         }
     }
+
+
 
 
 
