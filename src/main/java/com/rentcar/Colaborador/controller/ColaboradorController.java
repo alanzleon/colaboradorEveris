@@ -26,7 +26,7 @@ public class ColaboradorController {
     @Autowired
     private ColaboradorServiceImpls service;
 
-    @GetMapping("/colaborador")
+    @GetMapping()
     public ResponseEntity<?> getAll(){
         ResponseEntity<?> response;
         try {
@@ -41,7 +41,7 @@ public class ColaboradorController {
 
 
 
-    @GetMapping("/colaborador/{rut}")
+    @GetMapping("/{rut}")
     public ResponseEntity<?> getColaboradorByRut(@PathVariable(value = "rut") String rut){
         ResponseEntity<?> response;
         try{
@@ -61,7 +61,7 @@ public class ColaboradorController {
 
 
 
-    @PostMapping("/colaborador")
+    @PostMapping()
     public ResponseEntity<?> addCliente (@RequestBody ColaboradorEntity colaborador){
         ResponseEntity<?> response;
         String respuestaService = this.service.saveColaborador(colaborador);
@@ -79,11 +79,11 @@ public class ColaboradorController {
                 case "EmptyRut":
                     response = new ResponseEntity<>(mensajeError("Falta rut"), HttpStatus.BAD_REQUEST);
                     break;
-                case "rutExistente":
-                    response = new ResponseEntity<>(mensajeError("El rut ya existe, Intente otro"), HttpStatus.BAD_REQUEST);
-                    break;
                 case "invalidRut":
                     response = new ResponseEntity<>(mensajeError("Ingrese un rut valido, respetando '.' y '-' "), HttpStatus.CREATED);
+                    break;
+                case "rutExistente":
+                    response = new ResponseEntity<>(mensajeError("El rut ya existe, Intente otro"), HttpStatus.BAD_REQUEST);
                     break;
                 case "Emptyedad":
                     response = new ResponseEntity<>(mensajeError("falta edad"), HttpStatus.BAD_REQUEST);
@@ -131,29 +131,41 @@ public class ColaboradorController {
 
 
 
-    @RequestMapping(value = "/colaborador/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<?> actualizar(@RequestBody ColaboradorEntity colaborador, @PathVariable(value = "id") String id){
+    @PutMapping("/{rut}")
+    public ResponseEntity<?> actualizar(@RequestBody ColaboradorEntity colaborador, @PathVariable(value = "rut") String rut){
         ResponseEntity<?> response;
-        String respuestaService = this.service.updateColaborador(colaborador,id);
+        String respuestaService = this.service.updateColaborador(colaborador,rut);
         try {
             switch(respuestaService) {
                 case "update":
-                    response = new ResponseEntity<>(colaborador, HttpStatus.OK);
+                    response = new ResponseEntity<>(mensaje("Colaborador actualizado"), HttpStatus.OK);
                     break;
-                case "notfound":
-                    response = new ResponseEntity<>(mensajeError("Cliente No existe"),HttpStatus.NOT_FOUND);
+                case "notFound":
+                    response = new ResponseEntity<>(mensajeError("Colaborador No existe"),HttpStatus.NOT_FOUND);
                     break;
                 case "invalidEdad":
                     response = new ResponseEntity<>(mensajeError("La edad debe estar entre 18 y 100 años"),HttpStatus.BAD_REQUEST);
                     break;
-                case "invalidSexo":
-                    response = new ResponseEntity<>(mensajeError("El sexo debe ser Masculino o Femenino"),HttpStatus.BAD_REQUEST);
+                case "InvalidSexo":
+                    response = new ResponseEntity<>(mensajeError("El sexo debe ser Masculino o Femenino"), HttpStatus.BAD_REQUEST);
                     break;
-                case "invalidTelefono":
-                    response = new ResponseEntity<>(mensajeError("Ingrese un telefono valido"),HttpStatus.BAD_REQUEST);
+                case "InvalidSexoM":
+                    response = new ResponseEntity<>(mensajeError("El sexo Masculino deve tener la Edad  entre 18 y 65"), HttpStatus.BAD_REQUEST);
                     break;
-                case "invalidTipoLicencia":
-                    response = new ResponseEntity<>(mensajeError("El Nivel de Permiso debe ser 'Vendedor', 'Administrador' o 'Supervisor'"),HttpStatus.BAD_REQUEST);
+                case "InvalidSexoF":
+                    response = new ResponseEntity<>(mensajeError("El sexo Femenino deve tener la Edad  entre 18 y 60"), HttpStatus.BAD_REQUEST);
+                    break;
+                case "EmptyNivelPermisoM":
+                    response = new ResponseEntity<>(mensajeError("Falta nivelpermiso (M)"), HttpStatus.BAD_REQUEST);
+                    break;
+                case "InvalidobtenerPermisoM":
+                    response = new ResponseEntity<>(mensajeError("El Nivel de Permiso Masculino debe ser 'Administrado', 'Supervisor' o 'Vendedor'"), HttpStatus.BAD_REQUEST);
+                    break;
+                case "EmptyNivelPermisoF":
+                    response = new ResponseEntity<>(mensajeError("Falta nivelpermiso (F)"), HttpStatus.BAD_REQUEST);
+                    break;
+                case "InvalidobtenerPermisoF":
+                    response = new ResponseEntity<>(mensajeError("El Nivel de Permiso Femenino debe ser 'Administrado', 'Supervisor' o 'Vendedor'"), HttpStatus.BAD_REQUEST);
                     break;
                 default:
                     response = new ResponseEntity<>(mensajeError("Algo salio mal"),HttpStatus.INTERNAL_SERVER_ERROR);
