@@ -268,10 +268,11 @@ public class ColaboradorServiceImpls implements ColaboradorService {
             } else {
                 return "invalidEdad";
             }
+
+
             if(colaborador.getSexo() != null ){
-                String sexo = colaborador.getSexo().toLowerCase();
                 colaboradorbd.setSexo(colaborador.getSexo());
-                
+                String sexo = colaboradorbd.getSexo().toLowerCase();
                 if (sexo.equals("masculino")) {
                     if (colaborador.getEdad() >= 18 && colaborador.getEdad() <= 65) {
                         colaboradorbd.setEdad(colaborador.getEdad());
