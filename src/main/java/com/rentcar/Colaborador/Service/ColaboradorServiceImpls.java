@@ -288,8 +288,40 @@ public class ColaboradorServiceImpls implements ColaboradorService {
                 return "InvalidSexo";
             }
 
+            //Nivel de permiso && Fecha inicio
+            if(colaborador.getNivelpermiso() != null && colaborador.getFechincorporacion() != null) {
+                String nivelPErmiso = colaborador.getNivelpermiso().toLowerCase();
+                if(Arrays.asList(nivelPermiso).contains(nivelPErmiso)) {
+                    colaboradorbd.setNivelpermiso(nivelPErmiso);
+                    if(nivelPErmiso.equals("administrador")){
+                        colaboradorbd.setSueldobase(1000000);
+                    } else if(nivelPErmiso.equals("supervisor")) {
+                        colaboradorbd.setSueldobase(1500000);
+                    } else {
+                        colaboradorbd.setSueldobase(750000);
+                    }
 
-                if (colaborador.getNivelpermiso() != null) {
+                    LocalDate fechaInicio = colaborador.getFechincorporacion();
+                    LocalDate fechaActual = LocalDate.now();
+
+                    Period años = Period.between(fechaInicio, fechaActual);
+                    int añosEntreFechas = años.getYears();
+                    int sueldoBase = colaboradorbd.getSueldobase();
+                    int anioServicio = sueldoBase * 12;
+                    double bono = (anioServicio * 0.2);
+                    double sueldoMasBono = (sueldoBase + bono);
+                    colaboradorbd.setBonoservicio(bono);
+                    colaboradorbd.setSueldoMasBono(sueldoMasBono);
+
+                } else {
+                    return "InvalidNivelPermiso";
+                }
+
+            }
+
+
+
+            if (colaborador.getNivelpermiso() != null) {
                     String NivelPermiso = colaborador.getNivelpermiso().toLowerCase();
                     colaborador.setNivelpermiso(NivelPermiso);
 
@@ -346,6 +378,8 @@ public class ColaboradorServiceImpls implements ColaboradorService {
                         }
                     }
                 }
+
+
 
 
                 if  (colaborador.getFechincorporacion() != null){
