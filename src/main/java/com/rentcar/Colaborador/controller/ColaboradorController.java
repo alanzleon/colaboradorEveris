@@ -94,6 +94,12 @@ public class ColaboradorController {
                 case "EmptySexo":
                     response = new ResponseEntity<>(mensajeError("Falta sexo"), HttpStatus.BAD_REQUEST);
                     break;
+                case "fechaEmptyM":
+                    response = new ResponseEntity<>(mensajeError("falta fecha fechaincorporacion"), HttpStatus.BAD_REQUEST);
+                    break;
+                case "fechaEmptyF":
+                    response = new ResponseEntity<>(mensajeError("falta fecha fechaincorporacion"), HttpStatus.BAD_REQUEST);
+                    break;
                 case "InvalidSexo":
                     response = new ResponseEntity<>(mensajeError("El sexo debe ser Masculino o Femenino"), HttpStatus.BAD_REQUEST);
                     break;
@@ -119,7 +125,7 @@ public class ColaboradorController {
                     response = new ResponseEntity<>(mensajeCreado("Colaborador creado correctamente"), HttpStatus.CREATED);
                     break;
                 default:
-                    response = new ResponseEntity<>(mensaje(respuestaService),HttpStatus.INTERNAL_SERVER_ERROR);
+                    response = new ResponseEntity<>(mensajeError("Algo salio super mal!!! :c"),HttpStatus.INTERNAL_SERVER_ERROR);
                     break;
             }
         } catch (Exception ex) {
@@ -143,6 +149,9 @@ public class ColaboradorController {
                 case "notFound":
                     response = new ResponseEntity<>(mensajeError("Colaborador No existe"),HttpStatus.NOT_FOUND);
                     break;
+                case "invalidNivelPermiso":
+                    response = new ResponseEntity<>(mensajeError("nivelpermiso INVALIDO"), HttpStatus.BAD_REQUEST);
+                    break;
                 case "invalidEdad":
                     response = new ResponseEntity<>(mensajeError("La edad debe estar entre 18 y 100 años"),HttpStatus.BAD_REQUEST);
                     break;
@@ -161,8 +170,11 @@ public class ColaboradorController {
                 case "InvalidSexoF":
                     response = new ResponseEntity<>(mensajeError("El sexo Femenino deve tener la Edad  entre 18 y 60"), HttpStatus.BAD_REQUEST);
                     break;
-                case "EmptyNivelPermisoM":
-                    response = new ResponseEntity<>(mensajeError("Falta nivelpermiso (M)"), HttpStatus.BAD_REQUEST);
+                case "fechaEmptyM":
+                    response = new ResponseEntity<>(mensajeError("falta fecha fechaincorporacion"), HttpStatus.BAD_REQUEST);
+                    break;
+                case "fechaEmptyF":
+                    response = new ResponseEntity<>(mensajeError("falta fecha fechaincorporacion"), HttpStatus.BAD_REQUEST);
                     break;
                 case "InvalidobtenerPermisoM":
                     response = new ResponseEntity<>(mensajeError("El Nivel de Permiso Masculino debe ser 'Administrado', 'Supervisor' o 'Vendedor'"), HttpStatus.BAD_REQUEST);
